@@ -137,6 +137,23 @@ DATABASES = {
     ),
 }
 
+# Disable server-side cursors to prevent "cursor does not exist" errors
+# Especially important with connection pooling or database hibernation
+DISABLE_SERVER_SIDE_CURSORS = os.environ.get(
+    "DATABASE_DISABLE_SERVER_SIDE_CURSORS", "true"
+).lower() == "true"
+
+if DISABLE_SERVER_SIDE_CURSORS:
+    DATABASES[DATABASE_CONNECTION_DEFAULT_NAME]["DISABLE_SERVER_SIDE_CURSORS"] = True
+    DATABASES[DATABASE_CONNECTION_REPLICA_NAME]["DISABLE_SERVER_SIDE_CURSORS"] = True
+
+# Optional: Enable connection health checks (Django 4.1+)
+CONN_HEALTH_CHECKS = os.environ.get("DATABASE_CONN_HEALTH_CHECKS", "true").lower() == "true"
+if CONN_HEALTH_CHECKS:
+    DATABASES[DATABASE_CONNECTION_DEFAULT_NAME]["CONN_HEALTH_CHECKS"] = True
+    DATABASES[DATABASE_CONNECTION_REPLICA_NAME]["CONN_HEALTH_CHECKS"] = True
+```
+
 DATABASE_ROUTERS = ["saleor.core.db_routers.PrimaryReplicaRouter"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
