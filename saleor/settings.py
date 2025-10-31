@@ -515,17 +515,17 @@ TEST_RUNNER = "saleor.tests.runner.PytestTestRunner"
 
 PLAYGROUND_ENABLED = get_bool_from_env("PLAYGROUND_ENABLED", True)
 
-ALLOWED_HOSTS = get_list(os.environ.get("ALLOWED_HOSTS",
-                                        "admin.luxiormall.com,api.luxiormall.com,.luxiormall.com"))
+ALLOWED_HOSTS = get_list(os.environ.get("ALLOWED_HOSTS","admin.luxiormall.com,api.luxiormall.com,.luxiormall.com"))
 ALLOWED_GRAPHQL_ORIGINS: list[str] = get_list(
-    os.environ.get("ALLOWED_GRAPHQL_ORIGINS", "*")
+    os.environ.get("ALLOWED_GRAPHQL_ORIGINS",
+                   "https://admin.luxiormall.com,https://luxiormall.com,https://www.luxiormall.com")
 )
 
 # CORS Configuration - ADD THESE LINES HERE
 CORS_ALLOWED_ORIGINS = get_list(
     os.environ.get(
         "CORS_ALLOWED_ORIGINS",
-        "https://admin.luxiormall.com"
+        "https://admin.luxiormall.com,https://luxiormall.com,https://www.luxiormall.com"
     )
 )
 
