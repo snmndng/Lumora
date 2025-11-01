@@ -1,0 +1,66 @@
+{
+  "id": "mirumee.payments.mpesa",
+  "name": "M-Pesa Payment Gateway",
+  "description": "Accept M-Pesa payments via STK Push (Lipa Na M-Pesa Online). Integrates with Safaricom's Daraja API for seamless mobile money payments in Kenya.",
+  "version": "1.0.0",
+  "author": "Saleor Commerce",
+  "homepage": "https://developer.safaricom.co.ke/",
+  "support": {
+    "email": "support@example.com",
+    "url": "https://example.com/support"
+  },
+  "configuration": [
+    {
+      "name": "MPESA_CONSUMER_KEY",
+      "type": "String",
+      "help_text": "M-Pesa API Consumer Key from Daraja Portal",
+      "label": "Consumer Key",
+      "required": true
+    },
+    {
+      "name": "MPESA_CONSUMER_SECRET",
+      "type": "Secret",
+      "help_text": "M-Pesa API Consumer Secret from Daraja Portal",
+      "label": "Consumer Secret",
+      "required": true
+    },
+    {
+      "name": "MPESA_SHORTCODE",
+      "type": "String",
+      "help_text": "M-Pesa Business Shortcode (Paybill or Till Number)",
+      "label": "Business Shortcode",
+      "required": true
+    },
+    {
+      "name": "MPESA_PASSKEY",
+      "type": "Secret",
+      "help_text": "Lipa Na M-Pesa Online Passkey from Daraja Portal",
+      "label": "Passkey",
+      "required": true
+    },
+    {
+      "name": "MPESA_ENVIRONMENT",
+      "type": "String",
+      "help_text": "API Environment: 'sandbox' for testing or 'production' for live transactions",
+      "label": "Environment",
+      "choices": [
+        {"value": "sandbox", "label": "Sandbox (Testing)"},
+        {"value": "production", "label": "Production (Live)"}
+      ],
+      "default": "sandbox",
+      "required": true
+    },
+    {
+      "name": "MPESA_CALLBACK_URL",
+      "type": "String",
+      "help_text": "Public URL for M-Pesa to send payment confirmations (e.g., https://yourdomain.com/api/plugins/mpesa/callback/)",
+      "label": "Callback URL",
+      "required": true
+    }
+  ],
+  "permissions": [
+    "HANDLE_PAYMENTS"
+  ],
+  "channel_configuration": true,
+  "default_active": false
+}
