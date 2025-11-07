@@ -50,7 +50,10 @@ def clean_image_file(cleaned_input, img_field_name, error_class):
     """Extract and clean uploaded image file.
 
     Validate if the file is an image supported by thumbnails.
+    Optimized for Vercel memory constraints.
     """
+    from ....core.image_utils import estimate_memory_usage, optimize_image_for_upload
+    
     img_file = cleaned_input.get(img_field_name)
     if not img_file:
         raise ValidationError(
@@ -68,6 +71,23 @@ def clean_image_file(cleaned_input, img_field_name, error_class):
                 )
             }
         )
+
+    # Check estimated memory usage (50MB limit for Vercel)
+    estimated_memory = estimate_memory_usage(img_file)
+    if estimated_memory > 50 * 1024 * 1024:  # 50MB
+        # Try to optimize the image
+        optimized_file = optimize_image_for_upload(img_file)
+        if optimized_file:
+            img_file = optimized_file
+        else:
+            raise ValidationError(
+                {
+                    img_field_name: ValidationError(
+                        "Image is too large and cannot be processed. Please use a smaller image.",
+                        code=error_class.INVALID.value,
+                    )
+                }
+            )
 
     _validate_image_format(img_file, img_field_name, error_class)
     try:
@@ -95,6 +115,7 @@ def clean_image_file(cleaned_input, img_field_name, error_class):
 
     add_hash_to_file_name(img_file)
     return img_file
+                
 
 
 def _validate_image_format(file, field_name, error_class):
